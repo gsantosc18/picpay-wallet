@@ -8,20 +8,20 @@ import javax.persistence.*
 class Cliente (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int,
+    var id: Int? = null,
     @Column(name = "name")
-    val name: String,
+    var name: String,
     @Column(name = "lastname")
-    val lastName: String,
+    var lastName: String,
     @Column(name = "email")
-    val email: String,
+    var email: String,
     @Column(name = "birthday")
-    val birthday: LocalDate,
+    var birthday: LocalDate,
     @Column(name = "document")
-    val document: String,
+    var document: String,
     @Enumerated
     @Column(name = "documenttype")
-    val documentType: DocumentType,
+    var documentType: DocumentType,
     @OneToOne(mappedBy = "cliente")
-    val wallet: Wallet
+    var wallet: Wallet? = null
 )

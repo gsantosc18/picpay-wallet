@@ -9,12 +9,12 @@ import javax.persistence.*
 class Wallet (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val account: Int,
+    var account: Int? = null,
     @OneToOne
     @JoinColumn(name = "cliente")
     @JsonIgnore
     @ToString.Exclude
-    val cliente: Cliente,
+    var cliente: Cliente,
     @Column(name = "balance")
-    val balance: Double,
+    var balance: Double = 0.0,
 )
