@@ -7,6 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
 	idea
+	jacoco
 }
 
 group = "com.picpay"
@@ -55,7 +56,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito:mockito-core:3.3.3")
-	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+	testImplementation("com.vanniktech:gradle-android-junit-jacoco-plugin:0.15.0")
 }
 
 tasks.withType<KotlinCompile> {
@@ -80,3 +81,5 @@ val integrationTestTask = tasks.register<Test>("integrationTest") {
 tasks.check {
 	dependsOn(integrationTestTask)
 }
+
+apply(from  = "$rootDir/gradle/jacoco.gradle")
