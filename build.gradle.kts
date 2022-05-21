@@ -68,3 +68,15 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+val integrationTest: SourceSet = sourceSets["integrationTest"]
+val integrationTestTask = tasks.register<Test>("integrationTest") {
+	group = "verification"
+	testClassesDirs = integrationTest.output.classesDirs
+	classpath = integrationTest.runtimeClasspath
+	useJUnitPlatform()
+}
+
+tasks.check {
+	dependsOn(integrationTestTask)
+}
