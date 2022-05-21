@@ -22,6 +22,6 @@ class Cliente (
     @Enumerated
     @Column(name = "documenttype")
     var documentType: DocumentType,
-    @OneToOne(mappedBy = "cliente")
+    @OneToOne(mappedBy = "cliente", cascade = [ CascadeType.ALL ])
     var wallet: Wallet? = null
 )
