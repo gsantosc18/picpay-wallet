@@ -1,5 +1,6 @@
 package com.picpay.wallet.service.impl
 
+import com.picpay.wallet.dto.WalletDTO
 import com.picpay.wallet.dto.WithdrawDTO
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.NotFoundClientException
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service
 class WalletServiceImpl(
     private val walletRepository: WalletRepository
 ): WalletService {
-    override fun withdrawal(withdrawDTO: WithdrawDTO): WithdrawDTO {
+    override fun withdrawal(withdrawDTO: WithdrawDTO): WalletDTO {
         var wallet = walletRepository.findById(withdrawDTO.account).orElseThrow{NotFoundClientException()}
         val balance = wallet.balance
         val value = balance.minus(withdrawDTO.value)
@@ -22,6 +23,6 @@ class WalletServiceImpl(
 
         wallet.balance = value
         walletRepository.save(wallet)
-        return WithdrawDTO(account = wallet.account!!, value = value)
+        return WalletDTO(account = wallet.account!!, balance = value)
     }
 }
