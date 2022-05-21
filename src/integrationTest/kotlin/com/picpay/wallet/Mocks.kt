@@ -4,6 +4,7 @@ import com.picpay.wallet.dto.CreateClienteDTO
 import com.picpay.wallet.dto.UpdateClienteDTO
 import com.picpay.wallet.entity.Cliente
 import com.picpay.wallet.entity.DocumentType
+import com.picpay.wallet.entity.Wallet
 import java.time.LocalDate
 
 const val CLIENTE_NAME = "Fulano"
@@ -38,3 +39,15 @@ fun clienteMock() =
         document = DOCUMENT_NUMBER,
         documentType = DocumentType.CPF
     )
+
+fun walletMock() = Wallet(
+    account = 1,
+    balance = 10.0,
+    cliente = clienteMock()
+)
+
+fun walletMock(cliente: Cliente) = Wallet(
+    account = 2,
+    balance = 10.0,
+    cliente = cliente
+)

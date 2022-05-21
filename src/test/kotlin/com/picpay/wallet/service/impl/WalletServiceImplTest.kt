@@ -32,11 +32,11 @@ internal class WalletServiceImplTest {
     }
 
     @Test
-    fun `should withdrawal between wallets`() {
+    fun `should withdrawal from wallet`() {
         given(walletRepository.findById(anyInt())).willReturn(Optional.of(walletMock()))
         val withdrawal = walletServiceImpl.withdrawal(walletDTOMock())
 
-        assertThat(withdrawal.value).isEqualTo(5.0)
+        assertThat(withdrawal.balance).isEqualTo(5.0)
         assertThat(withdrawal.account).isEqualTo(walletDTOMock().account)
     }
 
