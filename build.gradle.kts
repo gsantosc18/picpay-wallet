@@ -6,11 +6,30 @@ plugins {
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
+	idea
 }
 
 group = "com.picpay"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_11
+
+sourceSets {
+	create("integrationTest") {
+		withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {
+			kotlin.srcDir("src/integrationTest/kotlin")
+			resources.srcDir("src/integrationTest/resources")
+			compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
+			runtimeClasspath += output + compileClasspath + sourceSets["test"].runtimeClasspath
+		}
+	}
+}
+
+idea {
+	module {
+		testSourceDirs.addAll(kotlin.sourceSets["integrationTest"].kotlin.srcDirs)
+		testSourceDirs.addAll(kotlin.sourceSets["integrationTest"].resources.srcDirs)
+	}
+}
 
 configurations {
 	compileOnly {
@@ -30,9 +49,11 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito:mockito-core:3.3.3")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 }
 
 tasks.withType<KotlinCompile> {
