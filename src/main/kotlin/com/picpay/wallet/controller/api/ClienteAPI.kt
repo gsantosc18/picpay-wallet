@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 @Api(value = "/", description = "Manipulação do cliente")
 @RequestMapping("/cliente")
 interface ClienteAPI {
-    @ApiOperation(value = "Cria um novo cliente")
+    @ApiOperation(value = "Criar um novo cliente")
     @PostMapping
     fun createNew(createClienteDTO: CreateClienteDTO): ResponseEntity<ClienteDTO>
-    @ApiOperation(value = "Atualiza as informações de cliente existente")
+    @ApiOperation(value = "Atualizar as informações de cliente existente")
     @PutMapping("/{id}")
     fun update(id: Int, updateClienteDTO: UpdateClienteDTO)
 }
