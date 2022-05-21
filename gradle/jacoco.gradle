@@ -1,9 +1,11 @@
+def reportsPath = "${project.buildDir}/jacoco"
 jacoco {
     toolVersion = "0.8.7"
     reportsDirectory.set(layout.buildDirectory.dir("jacocoHtml"))
 }
 
 tasks.jacocoTestReport {
+    executionData(fileTree(dir: "$reportsPath"))
     reports {
         xml.required.set(false)
         csv.required.set(false)
