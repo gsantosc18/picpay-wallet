@@ -1,31 +1,38 @@
 package com.picpay.wallet.util
 
 import com.picpay.wallet.dto.ClienteDTO
-import com.picpay.wallet.dto.CreateClienteDTO
+import com.picpay.wallet.dto.CreateClientDTO
 import com.picpay.wallet.dto.WalletDTO
-import com.picpay.wallet.entity.Cliente
+import com.picpay.wallet.entity.Client
+import com.picpay.wallet.entity.Wallet
 
-fun createDTOToCliente(createClienteDTO: CreateClienteDTO) =
-    Cliente(
-        name = createClienteDTO.name,
-        lastName = createClienteDTO.lastName,
-        email = createClienteDTO.email,
-        birthday = createClienteDTO.birthday,
-        document = createClienteDTO.document,
-        documentType = createClienteDTO.documentType
+fun createDTOToClient(createClientDTO: CreateClientDTO) =
+    Client(
+        name = createClientDTO.name,
+        lastName = createClientDTO.lastName,
+        email = createClientDTO.email,
+        birthday = createClientDTO.birthday,
+        document = createClientDTO.document,
+        documentType = createClientDTO.documentType
     )
 
-fun clienteToDTO(cliente: Cliente) =
+fun clientToDTO(client: Client) =
     ClienteDTO(
-        id = cliente.id!!,
-        name = cliente.name,
-        lastName = cliente.lastName,
-        email = cliente.email,
-        birthday = cliente.birthday,
-        document = cliente.document,
-        documentType = cliente.documentType,
+        id = client.id!!,
+        name = client.name,
+        lastName = client.lastName,
+        email = client.email,
+        birthday = client.birthday,
+        document = client.document,
+        documentType = client.documentType,
         wallet = WalletDTO(
-            account = cliente.wallet?.account!!,
-            balance = cliente.wallet?.balance!!
+            account = client.wallet?.account!!,
+            balance = client.wallet?.balance!!
         )
+    )
+
+fun walletToDTO(wallet: Wallet) =
+    WalletDTO(
+        account = wallet.account!!,
+        balance = wallet.balance
     )

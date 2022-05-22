@@ -69,13 +69,15 @@ internal class WalletServiceImplTest {
         given(walletRepository.findById(1)).willReturn(Optional.of(firstWallet))
         given(walletRepository.findById(2)).willReturn(Optional.of(secondWalletMock))
 
-        walletServiceImpl.transfer(transferDTO)
+        val transfer = walletServiceImpl.transfer(transferDTO)
 
         firstWallet.balance = 0.0
         secondWalletMock.balance = 15.0
 
         verify(walletRepository).save(firstWallet)
         verify(walletRepository).save(secondWalletMock)
+        assertThat(transfer.balance).isEqualTo(0.0)
+        assertThat(transfer.account).isEqualTo(firstWallet.account)
     }
 
     @Test

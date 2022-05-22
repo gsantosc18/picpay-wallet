@@ -1,5 +1,11 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:teste
+    url: jdbc:h2:mem:teste;MODE=PostgreSQL
     username: sa
     password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.format_sql: true

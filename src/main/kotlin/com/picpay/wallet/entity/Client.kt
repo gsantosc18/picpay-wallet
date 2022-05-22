@@ -4,10 +4,11 @@ import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
-@Table(name = "cliente")
-class Cliente (
+@Table(name = "client")
+class Client (
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
+    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME)
     var id: Int? = null,
     @Column(name = "name")
     var name: String,
@@ -22,6 +23,10 @@ class Cliente (
     @Enumerated
     @Column(name = "documenttype")
     var documentType: DocumentType,
-    @OneToOne(mappedBy = "cliente", cascade = [ CascadeType.ALL ])
+    @OneToOne(mappedBy = "client", cascade = [ CascadeType.ALL ])
     var wallet: Wallet? = null
-)
+) {
+    companion object {
+        const val SEQUENCE_NAME = "sq_client"
+    }
+}

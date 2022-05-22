@@ -1,30 +1,30 @@
 package com.picpay.wallet.service.impl
 
 import com.picpay.wallet.dto.ClienteDTO
-import com.picpay.wallet.dto.CreateClienteDTO
-import com.picpay.wallet.dto.UpdateClienteDTO
+import com.picpay.wallet.dto.CreateClientDTO
+import com.picpay.wallet.dto.UpdateClientDTO
 import com.picpay.wallet.entity.Wallet
 import com.picpay.wallet.exception.NotFoundClientException
 import com.picpay.wallet.repository.ClienteRepository
-import com.picpay.wallet.service.ClienteService
-import com.picpay.wallet.util.clienteToDTO
-import com.picpay.wallet.util.createDTOToCliente
+import com.picpay.wallet.service.ClientService
+import com.picpay.wallet.util.clientToDTO
+import com.picpay.wallet.util.createDTOToClient
 import org.springframework.stereotype.Service
 
 @Service
-class ClienteServiceImpl(
+class ClientServiceImpl(
     private val clienteRepository: ClienteRepository
-): ClienteService {
-    override fun create(createClienteDTO: CreateClienteDTO): ClienteDTO? {
-        val createNewCliente = createDTOToCliente(createClienteDTO)
+): ClientService {
+    override fun create(createClientDTO: CreateClientDTO): ClienteDTO? {
+        val createNewCliente = createDTOToClient(createClientDTO)
 
-        val wallet = Wallet(cliente = createNewCliente)
+        val wallet = Wallet(client = createNewCliente)
         createNewCliente.wallet = wallet
 
-        return clienteToDTO(clienteRepository.save(createNewCliente))
+        return clientToDTO(clienteRepository.save(createNewCliente))
     }
 
-    override fun update(id: Int, updateClientDTO: UpdateClienteDTO) {
+    override fun update(id: Int, updateClientDTO: UpdateClientDTO) {
         var updateClient = clienteRepository.findById(id).orElseThrow{NotFoundClientException()}
 
         updateClient.apply {

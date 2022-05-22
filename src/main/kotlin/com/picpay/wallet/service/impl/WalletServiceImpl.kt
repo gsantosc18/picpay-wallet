@@ -9,6 +9,7 @@ import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.NotFoundClientException
 import com.picpay.wallet.repository.WalletRepository
 import com.picpay.wallet.service.WalletService
+import com.picpay.wallet.util.walletToDTO
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,7 +27,7 @@ class WalletServiceImpl(
         return WalletDTO(account = wallet.account!!, balance = wallet.balance)
     }
 
-    override fun transfer(transferDTO: TransferDTO) {
+    override fun transfer(transferDTO: TransferDTO): WalletDTO {
         val sender = walletRepository.findById(transferDTO.sender).orElseThrow{NotFoundClientException()}
         val destination = walletRepository.findById(transferDTO.destination).orElseThrow{DestinationNotFoundException()}
         val value = transferDTO.value
@@ -37,6 +38,8 @@ class WalletServiceImpl(
 
         walletRepository.save(sender)
         walletRepository.save(destination)
+
+        return walletToDTO(sender)
     }
 
     fun validateBalance(wallet: Wallet, value: Double) {

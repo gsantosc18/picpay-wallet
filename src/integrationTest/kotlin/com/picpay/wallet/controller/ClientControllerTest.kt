@@ -1,20 +1,23 @@
 package com.picpay.wallet.controller
 
 import com.picpay.wallet.BaseTest
-import com.picpay.wallet.clienteMock
 import com.picpay.wallet.createClienteDtoMock
-import com.picpay.wallet.repository.ClienteRepository
 import com.picpay.wallet.updateClientDTOMock
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.test.context.jdbc.Sql
+import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
 
-class ClienteControllerTest(
-    @Autowired private val mockMvc: MockMvc,
-    @Autowired private val clienteRepository: ClienteRepository
+@SqlGroup(
+    Sql(scripts = ["classpath:db/insert_client.sql"], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+    Sql(scripts = ["classpath:db/clean_wallet.sql","classpath:db/clean_client.sql"], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+)
+class ClientControllerTest(
+    @Autowired private val mockMvc: MockMvc
 ): BaseTest() {
     companion object {
         const val ENDPOINT = "/cliente"
@@ -28,11 +31,11 @@ class ClienteControllerTest(
                 content = mapper().writeValueAsString(createClienteDtoMock())
             }
             .andExpect { status { isCreated() } }
+            .andDo { print() }
     }
 
     @Test
     fun `should update client`() {
-        clienteRepository.save(clienteMock())
         mockMvc.put(UPDATE, 1) {
                 contentType = APPLICATION_JSON
                 accept = APPLICATION_JSON
@@ -44,7 +47,7 @@ class ClienteControllerTest(
 
     @Test
     fun `shouldn't update cliente if not exist`() {
-        mockMvc.put(UPDATE, 2) {
+        mockMvc.put(UPDATE, 100) {
                 contentType = APPLICATION_JSON
                 accept = APPLICATION_JSON
                 content = mapper().writeValueAsString(updateClientDTOMock())

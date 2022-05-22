@@ -1,8 +1,8 @@
 package com.picpay.wallet.controller.api
 
 import com.picpay.wallet.dto.ClienteDTO
-import com.picpay.wallet.dto.CreateClienteDTO
-import com.picpay.wallet.dto.UpdateClienteDTO
+import com.picpay.wallet.dto.CreateClientDTO
+import com.picpay.wallet.dto.UpdateClientDTO
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.ResponseEntity
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Api(value = "/", description = "Manipulação do cliente")
 @RequestMapping("/cliente")
-interface ClienteAPI {
+interface ClientAPI {
     @ApiOperation(value = "Criar um novo cliente")
     @PostMapping
-    fun createNew(createClienteDTO: CreateClienteDTO): ResponseEntity<ClienteDTO>
+    fun createNew(createClientDTO: CreateClientDTO): ResponseEntity<ClienteDTO>
     @ApiOperation(value = "Atualizar as informações de cliente existente")
     @PutMapping("/{id}")
-    fun update(id: Int, updateClienteDTO: UpdateClienteDTO)
+    fun update(id: Int, updateClientDTO: UpdateClientDTO)
 }

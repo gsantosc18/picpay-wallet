@@ -5,7 +5,6 @@ import com.picpay.wallet.createClienteDtoMock
 import com.picpay.wallet.exception.NotFoundClientException
 import com.picpay.wallet.repository.ClienteRepository
 import com.picpay.wallet.updateClientDTOMock
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
@@ -13,17 +12,16 @@ import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import java.util.*
 
-internal class ClienteServiceImplTest {
+internal class ClientServiceImplTest {
     @InjectMocks
-    lateinit var clienteServiceImpl: ClienteServiceImpl
+    lateinit var clientServiceImpl: ClientServiceImpl
 
     @Mock
-    lateinit var clienteRepository: ClienteRepository
+    lateinit var clientRepository: ClienteRepository
 
     @BeforeEach
     fun setUp() {
@@ -32,8 +30,8 @@ internal class ClienteServiceImplTest {
 
     @Test
     fun `should create a new client`() {
-        given(clienteRepository.save(any())).willReturn(clienteMock())
-        val create = clienteServiceImpl.create(createClienteDtoMock())
+        given(clientRepository.save(any())).willReturn(clienteMock())
+        val create = clientServiceImpl.create(createClienteDtoMock())
 
         assertThat(create).isNotNull
         assertThat(create!!.id).isEqualTo(1)
@@ -41,17 +39,17 @@ internal class ClienteServiceImplTest {
 
     @Test
     fun `should update client`() {
-        given(clienteRepository.findById(any())).willReturn(Optional.of(clienteMock()))
+        given(clientRepository.findById(any())).willReturn(Optional.of(clienteMock()))
 
-        clienteServiceImpl.update(1, updateClientDTOMock())
+        clientServiceImpl.update(1, updateClientDTOMock())
 
-        verify(clienteRepository).save(any())
+        verify(clientRepository).save(any())
     }
 
     @Test
     fun `shouldn't update client if not exist`() {
-        given(clienteRepository.findById(any())).willReturn(Optional.empty())
+        given(clientRepository.findById(any())).willReturn(Optional.empty())
 
-        assertThatThrownBy { clienteServiceImpl.update(1, updateClientDTOMock()) }.isInstanceOf(NotFoundClientException::class.java)
+        assertThatThrownBy { clientServiceImpl.update(1, updateClientDTOMock()) }.isInstanceOf(NotFoundClientException::class.java)
     }
 }

@@ -1,8 +1,9 @@
 package com.picpay.wallet
 
-import com.picpay.wallet.dto.CreateClienteDTO
-import com.picpay.wallet.dto.UpdateClienteDTO
-import com.picpay.wallet.entity.Cliente
+import com.picpay.wallet.dto.CreateClientDTO
+import com.picpay.wallet.dto.TransferDTO
+import com.picpay.wallet.dto.UpdateClientDTO
+import com.picpay.wallet.entity.Client
 import com.picpay.wallet.entity.DocumentType
 import com.picpay.wallet.entity.Wallet
 import java.time.LocalDate
@@ -12,7 +13,7 @@ const val CLIENTE_LASTNAME = "Tal"
 const val CLIENTE_EMAIL = "fulanodetal@email.com"
 const val DOCUMENT_NUMBER = "123456789"
 
-fun createClienteDtoMock() = CreateClienteDTO(
+fun createClienteDtoMock() = CreateClientDTO(
     name = CLIENTE_NAME,
     lastName = CLIENTE_LASTNAME,
     email = CLIENTE_EMAIL,
@@ -21,7 +22,7 @@ fun createClienteDtoMock() = CreateClienteDTO(
     documentType = DocumentType.CPF
 )
 
-fun updateClientDTOMock() = UpdateClienteDTO(
+fun updateClientDTOMock() = UpdateClientDTO(
     name = "Siclano",
     lastName = "Silva",
     email = CLIENTE_EMAIL,
@@ -31,7 +32,7 @@ fun updateClientDTOMock() = UpdateClienteDTO(
 )
 
 fun clienteMock() =
-    Cliente(
+    Client(
         name = CLIENTE_NAME,
         lastName = CLIENTE_LASTNAME,
         email = CLIENTE_EMAIL,
@@ -43,11 +44,29 @@ fun clienteMock() =
 fun walletMock() = Wallet(
     account = 1,
     balance = 10.0,
-    cliente = clienteMock()
+    client = clienteMock()
 )
 
-fun walletMock(cliente: Cliente) = Wallet(
+fun walletMock(client: Client) = Wallet(
     account = 2,
     balance = 10.0,
-    cliente = cliente
+    client = client
+)
+
+fun transferDTOMock() = TransferDTO(
+    sender = 1,
+    destination = 2,
+    value = 5.0
+)
+
+fun invalidTransferDTOMock() = TransferDTO(
+    sender = 1,
+    destination = 2,
+    value = 15.0
+)
+
+fun senderNotExistTransferDTOMock() = TransferDTO(
+    sender = 100,
+    destination = 2,
+    value = 15.0
 )

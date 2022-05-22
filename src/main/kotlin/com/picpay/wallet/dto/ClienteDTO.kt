@@ -3,13 +3,13 @@ package com.picpay.wallet.dto
 import com.picpay.wallet.entity.DocumentType
 import java.time.LocalDate
 
-class ClienteDTO(
-    var id: Int,
-    var name: String,
-    var lastName: String,
-    var email: String,
-    var birthday: LocalDate,
-    var document: String,
-    var documentType: DocumentType,
-    var wallet: WalletDTO
+data class ClienteDTO(
+    val id: Int,
+    val name: String,
+    val lastName: String,
+    val email: String,
+    val birthday: LocalDate,
+    val document: String,
+    val documentType: DocumentType,
+    val wallet: WalletDTO
 )
