@@ -88,3 +88,13 @@ fun walletDepositMock() =
         balance = 15.0,
         client = clienteMock()
     )
+
+fun payDebitDTOMock() = PayDebitDTO(
+    account = 1,
+    value = 5.0
+)
+
+fun payDebitDTONegativeMock() = PayDebitDTO(
+    account = 1,
+    value = -5.0
+)

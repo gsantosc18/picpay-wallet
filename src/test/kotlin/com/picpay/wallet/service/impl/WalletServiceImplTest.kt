@@ -3,6 +3,7 @@ package com.picpay.wallet.service.impl
 import com.picpay.wallet.*
 import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
+import com.picpay.wallet.exception.InvalidValueException
 import com.picpay.wallet.exception.NotFoundClientException
 import com.picpay.wallet.repository.WalletRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -111,9 +112,8 @@ internal class WalletServiceImplTest {
 
     @Test
     fun `should deposit value in wallet`() {
-        val walletDepositMock = walletDepositMock()
         given(walletRepository.findById(any())).willReturn(Optional.of(walletMock()))
-        given(walletRepository.save(any())).willReturn(walletDepositMock)
+        given(walletRepository.save(any())).willReturn(walletDepositMock())
 
         var deposit = walletServiceImpl.deposit(depositDTOMock())
 
@@ -124,5 +124,27 @@ internal class WalletServiceImplTest {
     fun `shouldn't deposit if account not exist`() {
         given(walletRepository.findById(any())).willReturn(Optional.empty())
         assertThatThrownBy { walletServiceImpl.deposit(depositDTOMock()) }.isInstanceOf(NotFoundClientException::class.java)
+    }
+
+    @Test
+    fun `should pay debit from wallet`() {
+        given(walletRepository.findById(any())).willReturn(Optional.of(walletMock()))
+        given(walletRepository.save(any())).willReturn(walletDepositMock())
+
+        val payDebit = walletServiceImpl.payDebit(payDebitDTOMock())
+
+        assertThat(payDebit.balance).isEqualTo(5.0)
+    }
+
+    @Test
+    fun `shouldn't pay debit if wallet not exist`() {
+        given(walletRepository.findById(any())).willReturn(Optional.empty())
+        assertThatThrownBy { walletServiceImpl.payDebit(payDebitDTOMock()) }.isInstanceOf(NotFoundClientException::class.java)
+    }
+
+    @Test
+    fun `shouldn't pay debit if value is negative`() {
+        given(walletRepository.findById(any())).willReturn(Optional.empty())
+        assertThatThrownBy { walletServiceImpl.payDebit(payDebitDTONegativeMock()) }.isInstanceOf(InvalidValueException::class.java)
     }
 }
