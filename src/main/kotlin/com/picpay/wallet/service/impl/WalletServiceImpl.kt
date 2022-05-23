@@ -1,9 +1,6 @@
 package com.picpay.wallet.service.impl
 
-import com.picpay.wallet.dto.DepositDTO
-import com.picpay.wallet.dto.TransferDTO
-import com.picpay.wallet.dto.WalletDTO
-import com.picpay.wallet.dto.WithdrawDTO
+import com.picpay.wallet.dto.*
 import com.picpay.wallet.entity.Wallet
 import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
@@ -51,6 +48,17 @@ class WalletServiceImpl(
         val savedWallet = walletRepository.findById(depositDTO.account).orElseThrow { NotFoundClientException() }
 
         savedWallet.balance += depositDTO.value
+
+        walletRepository.save(savedWallet)
+
+        return walletToDTO(savedWallet)
+    }
+
+    override fun payDebit(payDebitDTO: PayDebitDTO): WalletDTO {
+        validateValue(payDebitDTO.value)
+        val savedWallet = walletRepository.findById(payDebitDTO.account).orElseThrow { NotFoundClientException() }
+
+        savedWallet.balance -= payDebitDTO.value
 
         walletRepository.save(savedWallet)
 
