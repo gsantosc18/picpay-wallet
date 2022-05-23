@@ -8,5 +8,5 @@ import com.picpay.wallet.dto.WithdrawDTO
 interface WalletService {
     fun withdrawal(withdrawDTO: WithdrawDTO): WalletDTO
     fun transfer(transferDTO: TransferDTO): WalletDTO
-    fun deposit(deposit: DepositDTO): WalletDTO
+    fun deposit(depositDTO: DepositDTO): WalletDTO
 }

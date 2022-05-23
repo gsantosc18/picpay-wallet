@@ -1,10 +1,12 @@
 package com.picpay.wallet.controller
 
 import com.picpay.wallet.controller.api.WalletAPI
+import com.picpay.wallet.dto.DepositDTO
 import com.picpay.wallet.dto.TransferDTO
 import com.picpay.wallet.dto.WalletDTO
 import com.picpay.wallet.dto.WithdrawDTO
 import com.picpay.wallet.exception.InsuficienteBalanceException
+import com.picpay.wallet.exception.InvalidValueException
 import com.picpay.wallet.exception.NotFoundClientException
 import com.picpay.wallet.service.WalletService
 import org.springframework.http.HttpStatus
@@ -26,7 +28,10 @@ class WalletController(
     override fun transfer(@RequestBody transferDTO: TransferDTO): ResponseEntity<WalletDTO> =
         status(OK).body(walletService.transfer(transferDTO))
 
-    @ExceptionHandler(value = ([InsuficienteBalanceException::class, NotFoundClientException::class]))
+    override fun deposit(@RequestBody depositDTO: DepositDTO): ResponseEntity<WalletDTO> =
+        status(OK).body(walletService.deposit(depositDTO))
+
+    @ExceptionHandler(value = [InsuficienteBalanceException::class, NotFoundClientException::class, InvalidValueException::class])
     fun exceptionHandler(runtimeException: RuntimeException) =
         status(BAD_REQUEST).body(mapOf("message" to runtimeException.message))
 }

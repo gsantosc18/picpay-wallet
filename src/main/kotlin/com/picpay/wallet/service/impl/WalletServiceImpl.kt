@@ -7,6 +7,7 @@ import com.picpay.wallet.dto.WithdrawDTO
 import com.picpay.wallet.entity.Wallet
 import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
+import com.picpay.wallet.exception.InvalidValueException
 import com.picpay.wallet.exception.NotFoundClientException
 import com.picpay.wallet.repository.WalletRepository
 import com.picpay.wallet.service.WalletService
@@ -18,6 +19,7 @@ class WalletServiceImpl(
     private val walletRepository: WalletRepository
 ): WalletService {
     override fun withdrawal(withdrawDTO: WithdrawDTO): WalletDTO {
+        validateValue(withdrawDTO.value)
         var wallet = walletRepository.findById(withdrawDTO.account).orElseThrow{NotFoundClientException()}
         val value = withdrawDTO.value
 
@@ -29,6 +31,7 @@ class WalletServiceImpl(
     }
 
     override fun transfer(transferDTO: TransferDTO): WalletDTO {
+        validateValue(transferDTO.value)
         val sender = walletRepository.findById(transferDTO.sender).orElseThrow{NotFoundClientException()}
         val destination = walletRepository.findById(transferDTO.destination).orElseThrow{DestinationNotFoundException()}
         val value = transferDTO.value
@@ -43,10 +46,11 @@ class WalletServiceImpl(
         return walletToDTO(sender)
     }
 
-    override fun deposit(deposit: DepositDTO): WalletDTO {
-        var savedWallet = walletRepository.findById(deposit.account).orElseThrow { NotFoundClientException() }
+    override fun deposit(depositDTO: DepositDTO): WalletDTO {
+        validateValue(depositDTO.value)
+        val savedWallet = walletRepository.findById(depositDTO.account).orElseThrow { NotFoundClientException() }
 
-        savedWallet.balance += deposit.value
+        savedWallet.balance += depositDTO.value
 
         walletRepository.save(savedWallet)
 
@@ -57,5 +61,9 @@ class WalletServiceImpl(
         if(wallet.balance.minus(value) < 0) {
             throw InsuficienteBalanceException()
         }
+    }
+
+    fun validateValue(value: Double) {
+        if (value < 0) throw InvalidValueException()
     }
 }
