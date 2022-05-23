@@ -1,9 +1,6 @@
 package com.picpay.wallet.controller.api
 
-import com.picpay.wallet.dto.DepositDTO
-import com.picpay.wallet.dto.TransferDTO
-import com.picpay.wallet.dto.WalletDTO
-import com.picpay.wallet.dto.WithdrawDTO
+import com.picpay.wallet.dto.*
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.ResponseEntity
@@ -21,7 +18,11 @@ interface WalletAPI {
     @PostMapping("/transfer")
     fun transfer(transferDTO: TransferDTO): ResponseEntity<WalletDTO>
 
-    @ApiOperation(value = "Depositar valor em uma carteiras")
+    @ApiOperation(value = "Depositar valor em uma carteira")
     @PostMapping("/deposit")
     fun deposit(depositDTO: DepositDTO): ResponseEntity<WalletDTO>
+
+    @ApiOperation(value = "Pagar conta com saldo de carteira")
+    @PostMapping("/paydebit")
+    fun payDebit(payDebitDTO: PayDebitDTO): ResponseEntity<WalletDTO>
 }

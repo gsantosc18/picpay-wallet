@@ -1,10 +1,7 @@
 package com.picpay.wallet.controller
 
 import com.picpay.wallet.controller.api.WalletAPI
-import com.picpay.wallet.dto.DepositDTO
-import com.picpay.wallet.dto.TransferDTO
-import com.picpay.wallet.dto.WalletDTO
-import com.picpay.wallet.dto.WithdrawDTO
+import com.picpay.wallet.dto.*
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.InvalidValueException
 import com.picpay.wallet.exception.NotFoundClientException
@@ -30,6 +27,9 @@ class WalletController(
 
     override fun deposit(@RequestBody depositDTO: DepositDTO): ResponseEntity<WalletDTO> =
         status(OK).body(walletService.deposit(depositDTO))
+
+    override fun payDebit(@RequestBody payDebitDTO: PayDebitDTO): ResponseEntity<WalletDTO> =
+        status(OK).body(walletService.payDebit(payDebitDTO))
 
     @ExceptionHandler(value = [InsuficienteBalanceException::class, NotFoundClientException::class, InvalidValueException::class])
     fun exceptionHandler(runtimeException: RuntimeException) =
