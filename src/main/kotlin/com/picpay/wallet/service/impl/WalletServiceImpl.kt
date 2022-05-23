@@ -2,18 +2,22 @@ package com.picpay.wallet.service.impl
 
 import com.picpay.wallet.dto.*
 import com.picpay.wallet.entity.Wallet
+import com.picpay.wallet.enums.HistoryAction
+import com.picpay.wallet.enums.HistoryAction.*
 import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.InvalidValueException
 import com.picpay.wallet.exception.NotFoundClientException
 import com.picpay.wallet.repository.WalletRepository
+import com.picpay.wallet.service.HistoryService
 import com.picpay.wallet.service.WalletService
 import com.picpay.wallet.util.walletToDTO
 import org.springframework.stereotype.Service
 
 @Service
 class WalletServiceImpl(
-    private val walletRepository: WalletRepository
+    private val walletRepository: WalletRepository,
+    private val historyService: HistoryService
 ): WalletService {
     override fun withdrawal(withdrawDTO: WithdrawDTO): WalletDTO {
         validateValue(withdrawDTO.value)
@@ -23,7 +27,7 @@ class WalletServiceImpl(
         validateBalance(wallet, value)
 
         wallet.balance -= value
-        walletRepository.save(wallet)
+        saveWalletAndHistory(wallet, WITHDRAWAL)
         return WalletDTO(account = wallet.account!!, balance = wallet.balance)
     }
 
@@ -37,8 +41,8 @@ class WalletServiceImpl(
         sender.balance -= value
         destination.balance += value
 
-        walletRepository.save(sender)
-        walletRepository.save(destination)
+        saveWalletAndHistory(sender, TRANSFER)
+        saveWalletAndHistory(destination, TRANSFER)
 
         return walletToDTO(sender)
     }
@@ -49,7 +53,7 @@ class WalletServiceImpl(
 
         savedWallet.balance += depositDTO.value
 
-        walletRepository.save(savedWallet)
+        saveWalletAndHistory(savedWallet, DEPOSIT)
 
         return walletToDTO(savedWallet)
     }
@@ -60,18 +64,23 @@ class WalletServiceImpl(
 
         savedWallet.balance -= payDebitDTO.value
 
-        walletRepository.save(savedWallet)
+        saveWalletAndHistory(savedWallet, PAY_DEBIT)
 
         return walletToDTO(savedWallet)
     }
 
-    fun validateBalance(wallet: Wallet, value: Double) {
+    private fun saveWalletAndHistory(wallet: Wallet, action: HistoryAction) {
+        walletRepository.save(wallet)
+        historyService.save(wallet, action)
+    }
+
+    private fun validateBalance(wallet: Wallet, value: Double) {
         if(wallet.balance.minus(value) < 0) {
             throw InsuficienteBalanceException()
         }
     }
 
-    fun validateValue(value: Double) {
+    private fun validateValue(value: Double) {
         if (value < 0) throw InvalidValueException()
     }
 }
