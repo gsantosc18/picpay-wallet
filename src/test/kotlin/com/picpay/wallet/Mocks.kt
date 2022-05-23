@@ -3,7 +3,10 @@ package com.picpay.wallet
 import com.picpay.wallet.dto.*
 import com.picpay.wallet.entity.Client
 import com.picpay.wallet.entity.DocumentType
+import com.picpay.wallet.entity.History
 import com.picpay.wallet.entity.Wallet
+import com.picpay.wallet.enums.HistoryAction
+import com.picpay.wallet.enums.HistoryAction.WITHDRAWAL
 import java.time.LocalDate
 
 const val CLIENTE_NAME = "Fulano"
@@ -97,4 +100,9 @@ fun payDebitDTOMock() = PayDebitDTO(
 fun payDebitDTONegativeMock() = PayDebitDTO(
     account = 1,
     value = -5.0
+)
+
+fun historyMock() = History(
+    wallet = walletMock(),
+    historyAction = WITHDRAWAL
 )
