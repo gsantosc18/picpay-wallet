@@ -1,6 +1,7 @@
 package com.picpay.wallet
 
 import com.picpay.wallet.dto.CreateClientDTO
+import com.picpay.wallet.dto.DepositDTO
 import com.picpay.wallet.dto.TransferDTO
 import com.picpay.wallet.dto.UpdateClientDTO
 import com.picpay.wallet.entity.Client
@@ -69,4 +70,14 @@ fun senderNotExistTransferDTOMock() = TransferDTO(
     sender = 100,
     destination = 2,
     value = 15.0
+)
+
+fun depositDTOMock() = DepositDTO(
+    account = 1,
+    value = 15.0
+)
+
+fun depositDTOValueNegativeMock() = DepositDTO(
+    account = 1,
+    value = -10.0
 )

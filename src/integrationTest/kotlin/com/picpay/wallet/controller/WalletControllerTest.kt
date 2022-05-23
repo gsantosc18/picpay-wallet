@@ -1,15 +1,13 @@
 package com.picpay.wallet.controller
 
-import com.picpay.wallet.BaseTest
+import com.picpay.wallet.*
 import com.picpay.wallet.dto.WithdrawDTO
 import com.picpay.wallet.entity.Wallet
-import com.picpay.wallet.invalidTransferDTOMock
 import com.picpay.wallet.repository.WalletRepository
-import com.picpay.wallet.senderNotExistTransferDTOMock
-import com.picpay.wallet.transferDTOMock
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.context.jdbc.SqlGroup
@@ -27,6 +25,7 @@ class WalletControllerTest(
         const val ENDPOINT = "/wallet"
         const val WITHDRAWAL = ENDPOINT+"/withdrawal"
         const val TRANSFER = ENDPOINT+"/transfer"
+        const val DEPOSIT = ENDPOINT+"/deposit"
     }
 
     @Test
@@ -103,6 +102,34 @@ class WalletControllerTest(
             .andExpect {
                 status { isBadRequest() }
                 jsonPath("$.message", Matchers.`is`("O cliente não foi encontrado."))
+            }
+            .andDo { print() }
+    }
+
+    @Test
+    fun `should deposit value in wallet`() {
+        mockMvc.post(DEPOSIT) {
+                contentType = APPLICATION_JSON
+                accept = APPLICATION_JSON
+                content = mapper().writeValueAsString(depositDTOMock())
+            }
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.balance", Matchers.notNullValue())
+            }
+            .andDo { print() }
+    }
+
+    @Test
+    fun `shouldn't deposit in wallet if value is negative`() {
+        mockMvc.post(DEPOSIT) {
+                contentType = APPLICATION_JSON
+                accept = APPLICATION_JSON
+                content = mapper().writeValueAsString(depositDTOValueNegativeMock())
+            }
+            .andExpect {
+                status { isBadRequest() }
+                jsonPath("$.message", Matchers.`is`("O valor informa deve ser positivo."))
             }
             .andDo { print() }
     }
