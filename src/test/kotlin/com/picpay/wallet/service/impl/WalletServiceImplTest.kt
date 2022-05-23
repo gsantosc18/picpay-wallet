@@ -1,19 +1,15 @@
 package com.picpay.wallet.service.impl
 
+import com.picpay.wallet.*
 import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.NotFoundClientException
 import com.picpay.wallet.repository.WalletRepository
-import com.picpay.wallet.secondWalletMock
-import com.picpay.wallet.transferDTOMock
-import com.picpay.wallet.walletDTOMock
-import com.picpay.wallet.walletMock
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito.anyInt
-import org.mockito.BDDMockito.given
+import org.mockito.BDDMockito.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.verify
@@ -111,5 +107,22 @@ internal class WalletServiceImplTest {
 
         assertThatThrownBy { walletServiceImpl.transfer(transferDTOMock()) }
             .isInstanceOf(InsuficienteBalanceException::class.java)
+    }
+
+    @Test
+    fun `should deposit value in wallet`() {
+        val walletDepositMock = walletDepositMock()
+        given(walletRepository.findById(any())).willReturn(Optional.of(walletMock()))
+        given(walletRepository.save(any())).willReturn(walletDepositMock)
+
+        var deposit = walletServiceImpl.deposit(depositDTOMock())
+
+        assertThat(deposit.balance).isEqualTo(15.0)
+    }
+
+    @Test
+    fun `shouldn't deposit if account not exist`() {
+        given(walletRepository.findById(any())).willReturn(Optional.empty())
+        assertThatThrownBy { walletServiceImpl.deposit(depositDTOMock()) }.isInstanceOf(NotFoundClientException::class.java)
     }
 }

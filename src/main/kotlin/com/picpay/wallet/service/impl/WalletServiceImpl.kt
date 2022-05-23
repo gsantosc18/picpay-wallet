@@ -1,5 +1,6 @@
 package com.picpay.wallet.service.impl
 
+import com.picpay.wallet.dto.DepositDTO
 import com.picpay.wallet.dto.TransferDTO
 import com.picpay.wallet.dto.WalletDTO
 import com.picpay.wallet.dto.WithdrawDTO
@@ -40,6 +41,16 @@ class WalletServiceImpl(
         walletRepository.save(destination)
 
         return walletToDTO(sender)
+    }
+
+    override fun deposit(deposit: DepositDTO): WalletDTO {
+        var savedWallet = walletRepository.findById(deposit.account).orElseThrow { NotFoundClientException() }
+
+        savedWallet.balance += deposit.value
+
+        walletRepository.save(savedWallet)
+
+        return walletToDTO(savedWallet)
     }
 
     fun validateBalance(wallet: Wallet, value: Double) {

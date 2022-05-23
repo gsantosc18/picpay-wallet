@@ -1,9 +1,6 @@
 package com.picpay.wallet
 
-import com.picpay.wallet.dto.CreateClientDTO
-import com.picpay.wallet.dto.TransferDTO
-import com.picpay.wallet.dto.UpdateClientDTO
-import com.picpay.wallet.dto.WithdrawDTO
+import com.picpay.wallet.dto.*
 import com.picpay.wallet.entity.Client
 import com.picpay.wallet.entity.DocumentType
 import com.picpay.wallet.entity.Wallet
@@ -79,3 +76,15 @@ fun transferDTOMock() = TransferDTO(
     destination = 2,
     value = 10.0
 )
+
+fun depositDTOMock() = DepositDTO(
+    account = 1,
+    value = 5.0
+)
+
+fun walletDepositMock() =
+    Wallet(
+        account = 1,
+        balance = 15.0,
+        client = clienteMock()
+    )
