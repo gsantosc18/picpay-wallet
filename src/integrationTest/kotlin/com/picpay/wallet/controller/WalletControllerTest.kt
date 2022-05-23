@@ -26,6 +26,7 @@ class WalletControllerTest(
         const val WITHDRAWAL = ENDPOINT+"/withdrawal"
         const val TRANSFER = ENDPOINT+"/transfer"
         const val DEPOSIT = ENDPOINT+"/deposit"
+        const val PAYDEBIT = ENDPOINT+"/paydebit"
     }
 
     @Test
@@ -127,6 +128,48 @@ class WalletControllerTest(
                 accept = APPLICATION_JSON
                 content = mapper().writeValueAsString(depositDTOValueNegativeMock())
             }
+            .andExpect {
+                status { isBadRequest() }
+                jsonPath("$.message", Matchers.`is`("O valor informa deve ser positivo."))
+            }
+            .andDo { print() }
+    }
+
+    @Test
+    fun `should pay debit with ballance of the wallet`() {
+        mockMvc.post(PAYDEBIT) {
+                contentType = APPLICATION_JSON
+                accept = APPLICATION_JSON
+                content = mapper().writeValueAsString(payDebitDTOMock())
+            }
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.balance", Matchers.`is`(5.0))
+            }
+            .andDo { print() }
+    }
+
+    @Test
+    fun `shouldn't pay debit if not exist wallet`() {
+        mockMvc.post(PAYDEBIT) {
+            contentType = APPLICATION_JSON
+            accept = APPLICATION_JSON
+            content = mapper().writeValueAsString(payDebitDTONonexistentWalletMock())
+        }
+            .andExpect {
+                status { isBadRequest() }
+                jsonPath("$.message", Matchers.`is`("O cliente não foi encontrado."))
+            }
+            .andDo { print() }
+    }
+
+    @Test
+    fun `shouldn't pay debit if value is negative`() {
+        mockMvc.post(PAYDEBIT) {
+            contentType = APPLICATION_JSON
+            accept = APPLICATION_JSON
+            content = mapper().writeValueAsString(payDebitDTOInvalidValueMock())
+        }
             .andExpect {
                 status { isBadRequest() }
                 jsonPath("$.message", Matchers.`is`("O valor informa deve ser positivo."))
