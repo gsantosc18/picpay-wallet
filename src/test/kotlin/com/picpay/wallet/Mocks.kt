@@ -8,6 +8,8 @@ import com.picpay.wallet.entity.Wallet
 import com.picpay.wallet.enums.HistoryAction
 import com.picpay.wallet.enums.HistoryAction.WITHDRAWAL
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalDateTime.now
 
 const val CLIENTE_NAME = "Fulano"
 const val CLIENTE_LASTNAME = "Tal"
@@ -42,7 +44,8 @@ fun clienteMock() = Client(
             birthday = LocalDate.now(),
             document = DOCUMENT_NUMBER,
             documentType = DocumentType.CPF,
-        )
+        ),
+        createdAt = now()
     )
 )
 
@@ -59,14 +62,16 @@ fun walletMock() =
     Wallet(
         account = 1,
         balance = 10.0,
-        client = clienteMock()
+        client = clienteMock(),
+        createdAt = now()
     )
 
 fun secondWalletMock() =
     Wallet(
         account = 2,
         balance = 5.0,
-        client = clienteMock()
+        client = clienteMock(),
+        createdAt = now()
     )
 
 fun walletDTOMock() = WithdrawDTO(
@@ -89,7 +94,8 @@ fun walletDepositMock() =
     Wallet(
         account = 1,
         balance = 15.0,
-        client = clienteMock()
+        client = clienteMock(),
+        createdAt = now()
     )
 
 fun payDebitDTOMock() = PayDebitDTO(

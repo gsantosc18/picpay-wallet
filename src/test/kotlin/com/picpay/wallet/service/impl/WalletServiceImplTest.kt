@@ -1,6 +1,8 @@
 package com.picpay.wallet.service.impl
 
 import com.picpay.wallet.*
+import com.picpay.wallet.enums.HistoryAction
+import com.picpay.wallet.enums.HistoryAction.*
 import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.InvalidValueException
@@ -24,6 +26,9 @@ internal class WalletServiceImplTest {
     @Mock
     private lateinit var walletRepository: WalletRepository
 
+    @Mock
+    private lateinit var historyServiceImpl: HistoryServiceImpl
+
     @BeforeEach
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -31,7 +36,9 @@ internal class WalletServiceImplTest {
 
     @Test
     fun `should withdrawal from wallet`() {
-        given(walletRepository.findById(anyInt())).willReturn(Optional.of(walletMock()))
+        val walletMock = walletMock()
+        given(walletRepository.findById(anyInt())).willReturn(Optional.of(walletMock))
+        given(historyServiceImpl.save(walletMock, WITHDRAWAL)).willReturn(historyMock())
         val withdrawal = walletServiceImpl.withdrawal(walletDTOMock())
 
         assertThat(withdrawal.balance).isEqualTo(5.0)
@@ -65,6 +72,8 @@ internal class WalletServiceImplTest {
         val transferDTO = transferDTOMock()
         given(walletRepository.findById(1)).willReturn(Optional.of(firstWallet))
         given(walletRepository.findById(2)).willReturn(Optional.of(secondWalletMock))
+        given(historyServiceImpl.save(firstWallet, TRANSFER)).willReturn(historyMock())
+        given(historyServiceImpl.save(secondWalletMock, TRANSFER)).willReturn(historyMock())
 
         val transfer = walletServiceImpl.transfer(transferDTO)
 
@@ -112,8 +121,10 @@ internal class WalletServiceImplTest {
 
     @Test
     fun `should deposit value in wallet`() {
-        given(walletRepository.findById(any())).willReturn(Optional.of(walletMock()))
+        val walletMock = walletMock()
+        given(walletRepository.findById(any())).willReturn(Optional.of(walletMock))
         given(walletRepository.save(any())).willReturn(walletDepositMock())
+        given(historyServiceImpl.save(walletMock, DEPOSIT)).willReturn(historyMock())
 
         var deposit = walletServiceImpl.deposit(depositDTOMock())
 
@@ -128,8 +139,10 @@ internal class WalletServiceImplTest {
 
     @Test
     fun `should pay debit from wallet`() {
-        given(walletRepository.findById(any())).willReturn(Optional.of(walletMock()))
+        val walletMock = walletMock()
+        given(walletRepository.findById(any())).willReturn(Optional.of(walletMock))
         given(walletRepository.save(any())).willReturn(walletDepositMock())
+        given(historyServiceImpl.save(walletMock, PAY_DEBIT)).willReturn(historyMock())
 
         val payDebit = walletServiceImpl.payDebit(payDebitDTOMock())
 

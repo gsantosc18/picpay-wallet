@@ -28,7 +28,7 @@ class WalletServiceImpl(
 
         wallet.balance -= value
         saveWalletAndHistory(wallet, WITHDRAWAL)
-        return WalletDTO(account = wallet.account!!, balance = wallet.balance)
+        return walletToDTO(wallet)
     }
 
     override fun transfer(transferDTO: TransferDTO): WalletDTO {
@@ -70,8 +70,9 @@ class WalletServiceImpl(
     }
 
     private fun saveWalletAndHistory(wallet: Wallet, action: HistoryAction) {
+        val history = historyService.save(wallet, action)
+        wallet.addHistory(history)
         walletRepository.save(wallet)
-        historyService.save(wallet, action)
     }
 
     private fun validateBalance(wallet: Wallet, value: Double) {

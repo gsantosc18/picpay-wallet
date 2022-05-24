@@ -27,12 +27,16 @@ fun clientToDTO(client: Client) =
         documentType = client.documentType,
         wallet = WalletDTO(
             account = client.wallet?.account!!,
-            balance = client.wallet?.balance!!
+            balance = client.wallet?.balance!!,
+            createdAt = client.wallet?.createdAt!!,
+            updatedAt = client.wallet?.updatedAt
         )
     )
 
 fun walletToDTO(wallet: Wallet) =
     WalletDTO(
         account = wallet.account!!,
-        balance = wallet.balance
+        balance = wallet.balance,
+        createdAt = wallet.createdAt!!,
+        updatedAt = wallet.updatedAt
     )

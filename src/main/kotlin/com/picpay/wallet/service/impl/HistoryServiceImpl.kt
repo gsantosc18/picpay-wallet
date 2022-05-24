@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service
 class HistoryServiceImpl(
     val historyRepository: HistoryRepository
 ): HistoryService {
-    override fun save(wallet: Wallet, action: HistoryAction) {
+    override fun save(wallet: Wallet, action: HistoryAction): History {
         val history = History(
             wallet = wallet,
             historyAction = action
         )
-        historyRepository.save(history)
+        return historyRepository.save(history)
     }
 }

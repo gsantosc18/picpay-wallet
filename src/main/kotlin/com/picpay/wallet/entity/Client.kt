@@ -1,7 +1,9 @@
 package com.picpay.wallet.entity
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.persistence.*
+import javax.persistence.EnumType.STRING
 
 @Entity
 @Table(name = "client")
@@ -20,12 +22,13 @@ class Client (
     var birthday: LocalDate,
     @Column(name = "document")
     var document: String,
-    @Enumerated
+    @Enumerated(STRING)
     @Column(name = "documenttype")
     var documentType: DocumentType,
     @OneToOne(mappedBy = "client", cascade = [ CascadeType.ALL ])
-    var wallet: Wallet? = null
-) {
+    var wallet: Wallet? = null,
+    override var createdAt: LocalDateTime? = null
+): BaseEntity() {
     companion object {
         const val SEQUENCE_NAME = "sq_client"
     }

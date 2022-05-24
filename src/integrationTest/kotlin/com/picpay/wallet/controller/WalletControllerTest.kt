@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 @SqlGroup(
     Sql(scripts = ["classpath:db/insert_client.sql","classpath:db/insert_wallet.sql"], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-    Sql(scripts = ["classpath:db/clean_wallet.sql", "classpath:db/clean_client.sql"], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    Sql(scripts = ["classpath:db/clean_history.sql", "classpath:db/clean_wallet.sql", "classpath:db/clean_client.sql"], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 )
 class WalletControllerTest(
     @Autowired private val mockMvc: MockMvc,
