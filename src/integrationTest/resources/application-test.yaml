@@ -4,8 +4,15 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  rabbitmq:
+    host: localhost
+    port: 5679
+    username: guest
+    password: guest
 
   jpa:
     show-sql: true
     properties:
       hibernate.format_sql: true
+queue:
+  history: history-queue

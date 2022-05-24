@@ -3,16 +3,20 @@ package com.picpay.wallet.controller
 import com.picpay.wallet.*
 import com.picpay.wallet.dto.WithdrawDTO
 import com.picpay.wallet.entity.Wallet
+import com.picpay.wallet.rabbit.HistoryProducer
 import com.picpay.wallet.repository.WalletRepository
 import org.hamcrest.Matchers
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.MockitoAnnotations
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+
 @SqlGroup(
     Sql(scripts = ["classpath:db/insert_client.sql","classpath:db/insert_wallet.sql"], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
     Sql(scripts = ["classpath:db/clean_history.sql", "classpath:db/clean_wallet.sql", "classpath:db/clean_client.sql"], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -21,6 +25,14 @@ class WalletControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val walletRepository: WalletRepository
 ): BaseTest() {
+    @MockBean
+    lateinit var historyProducer: HistoryProducer
+
+    @BeforeEach
+    fun setUp() {
+        MockitoAnnotations.initMocks(this)
+    }
+
     companion object {
         const val ENDPOINT = "/wallet"
         const val WITHDRAWAL = ENDPOINT+"/withdrawal"

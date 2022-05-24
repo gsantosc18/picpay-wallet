@@ -1,12 +1,12 @@
 package com.picpay.wallet.service.impl
 
 import com.picpay.wallet.*
-import com.picpay.wallet.enums.HistoryAction
 import com.picpay.wallet.enums.HistoryAction.*
 import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.InvalidValueException
 import com.picpay.wallet.exception.NotFoundClientException
+import com.picpay.wallet.rabbit.HistoryProducer
 import com.picpay.wallet.repository.WalletRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -25,6 +25,9 @@ internal class WalletServiceImplTest {
 
     @Mock
     private lateinit var walletRepository: WalletRepository
+
+    @Mock
+    lateinit var historyProducer: HistoryProducer
 
     @Mock
     private lateinit var historyServiceImpl: HistoryServiceImpl

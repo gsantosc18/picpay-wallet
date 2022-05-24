@@ -8,6 +8,7 @@ import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.InvalidValueException
 import com.picpay.wallet.exception.NotFoundClientException
+import com.picpay.wallet.rabbit.HistoryProducer
 import com.picpay.wallet.repository.WalletRepository
 import com.picpay.wallet.service.HistoryService
 import com.picpay.wallet.service.WalletService
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Service
 @Service
 class WalletServiceImpl(
     private val walletRepository: WalletRepository,
-    private val historyService: HistoryService
+    private val historyService: HistoryService,
+    private val historyProducer: HistoryProducer
 ): WalletService {
     override fun withdrawal(withdrawDTO: WithdrawDTO): WalletDTO {
         validateValue(withdrawDTO.value)
@@ -73,6 +75,7 @@ class WalletServiceImpl(
         val history = historyService.save(wallet, action)
         wallet.addHistory(history)
         walletRepository.save(wallet)
+        historyProducer.sender(history)
     }
 
     private fun validateBalance(wallet: Wallet, value: Double) {
