@@ -19,5 +19,6 @@ class HistoryProducer(
     fun sender(history: History) {
         log.info("M=sender, message=Init send historic to Rabbit, wallet={}", history.wallet.account)
         rabbitTemplate.convertAndSend(historyQueue.name,objectMapper.serialize(history))
+        log.info("M=sender, message=Init send historic to Rabbit, wallet={}", history.wallet.account)
     }
 }

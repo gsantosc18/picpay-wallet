@@ -18,8 +18,7 @@ import org.springframework.stereotype.Service
 @Service
 class WalletServiceImpl(
     private val walletRepository: WalletRepository,
-    private val historyService: HistoryService,
-    private val historyProducer: HistoryProducer
+    private val historyService: HistoryService
 ): WalletService {
     override fun withdrawal(withdrawDTO: WithdrawDTO): WalletDTO {
         validateValue(withdrawDTO.value)
@@ -72,10 +71,8 @@ class WalletServiceImpl(
     }
 
     private fun saveWalletAndHistory(wallet: Wallet, action: HistoryAction) {
-        val history = historyService.save(wallet, action)
-        wallet.addHistory(history)
+        historyService.save(wallet, action)
         walletRepository.save(wallet)
-        historyProducer.sender(history)
     }
 
     private fun validateBalance(wallet: Wallet, value: Double) {
