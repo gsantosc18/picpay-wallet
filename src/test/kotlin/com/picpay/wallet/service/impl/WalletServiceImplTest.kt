@@ -2,10 +2,7 @@ package com.picpay.wallet.service.impl
 
 import com.picpay.wallet.*
 import com.picpay.wallet.enums.HistoryAction.*
-import com.picpay.wallet.exception.DestinationNotFoundException
-import com.picpay.wallet.exception.InsuficienteBalanceException
-import com.picpay.wallet.exception.InvalidValueException
-import com.picpay.wallet.exception.NotFoundClientException
+import com.picpay.wallet.exception.*
 import com.picpay.wallet.rabbit.HistoryProducer
 import com.picpay.wallet.repository.WalletRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -64,7 +61,7 @@ internal class WalletServiceImplTest {
         given(walletRepository.findById(anyInt())).willReturn(Optional.empty())
 
         assertThatThrownBy { walletServiceImpl.withdrawal(walletDTOMock()) }
-            .isInstanceOf(NotFoundClientException::class.java)
+            .isInstanceOf(NotFoundWalletException::class.java)
     }
 
     @Test
@@ -102,7 +99,7 @@ internal class WalletServiceImplTest {
         given(walletRepository.findById(1)).willReturn(Optional.empty())
 
         assertThatThrownBy { walletServiceImpl.transfer(transferDTOMock()) }
-            .isInstanceOf(NotFoundClientException::class.java)
+            .isInstanceOf(NotFoundWalletException::class.java)
     }
 
     @Test
@@ -133,7 +130,7 @@ internal class WalletServiceImplTest {
     @Test
     fun `shouldn't deposit if account not exist`() {
         given(walletRepository.findById(any())).willReturn(Optional.empty())
-        assertThatThrownBy { walletServiceImpl.deposit(depositDTOMock()) }.isInstanceOf(NotFoundClientException::class.java)
+        assertThatThrownBy { walletServiceImpl.deposit(depositDTOMock()) }.isInstanceOf(NotFoundWalletException::class.java)
     }
 
     @Test
@@ -150,7 +147,7 @@ internal class WalletServiceImplTest {
     @Test
     fun `shouldn't pay debit if wallet not exist`() {
         given(walletRepository.findById(any())).willReturn(Optional.empty())
-        assertThatThrownBy { walletServiceImpl.payDebit(payDebitDTOMock()) }.isInstanceOf(NotFoundClientException::class.java)
+        assertThatThrownBy { walletServiceImpl.payDebit(payDebitDTOMock()) }.isInstanceOf(NotFoundWalletException::class.java)
     }
 
     @Test
@@ -170,6 +167,6 @@ internal class WalletServiceImplTest {
     @Test
     fun `shouldn't find wallet if not exist`() {
         given(walletRepository.findById(any())).willReturn(Optional.empty())
-        assertThatThrownBy { walletServiceImpl.find(1) }.isInstanceOf(NotFoundClientException::class.java)
+        assertThatThrownBy { walletServiceImpl.find(1) }.isInstanceOf(NotFoundWalletException::class.java)
     }
 }

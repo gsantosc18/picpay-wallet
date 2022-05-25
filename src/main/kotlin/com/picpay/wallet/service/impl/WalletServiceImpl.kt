@@ -7,7 +7,7 @@ import com.picpay.wallet.enums.HistoryAction.*
 import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.InvalidValueException
-import com.picpay.wallet.exception.NotFoundClientException
+import com.picpay.wallet.exception.NotFoundWalletException
 import com.picpay.wallet.repository.WalletRepository
 import com.picpay.wallet.service.HistoryService
 import com.picpay.wallet.service.WalletService
@@ -24,7 +24,7 @@ class WalletServiceImpl(
     override fun withdrawal(withdrawDTO: WithdrawDTO): WalletDTO {
         log.info("M=withdrawal, message=Init withdrawal, wallet={}", withdrawDTO.account)
         validateValue(withdrawDTO.value)
-        var wallet = walletRepository.findById(withdrawDTO.account).orElseThrow{NotFoundClientException()}
+        var wallet = walletRepository.findById(withdrawDTO.account).orElseThrow{ NotFoundWalletException() }
         val value = withdrawDTO.value
 
         validateBalance(wallet, value)
@@ -39,7 +39,7 @@ class WalletServiceImpl(
         log.info("M=transfer, message=Init transfer between wallets, sender={}, destination={}, value={}",
             transferDTO.sender, transferDTO.destination, transferDTO.value)
         validateValue(transferDTO.value)
-        val sender = walletRepository.findById(transferDTO.sender).orElseThrow{NotFoundClientException()}
+        val sender = walletRepository.findById(transferDTO.sender).orElseThrow{NotFoundWalletException()}
         val destination = walletRepository.findById(transferDTO.destination).orElseThrow{DestinationNotFoundException()}
         val value = transferDTO.value
         validateBalance(sender, value)
@@ -57,7 +57,7 @@ class WalletServiceImpl(
 
     override fun deposit(depositDTO: DepositDTO): WalletDTO {
         validateValue(depositDTO.value)
-        val savedWallet = walletRepository.findById(depositDTO.account).orElseThrow { NotFoundClientException() }
+        val savedWallet = walletRepository.findById(depositDTO.account).orElseThrow { NotFoundWalletException() }
 
         savedWallet.balance += depositDTO.value
 
@@ -68,7 +68,7 @@ class WalletServiceImpl(
 
     override fun payDebit(payDebitDTO: PayDebitDTO): WalletDTO {
         validateValue(payDebitDTO.value)
-        val savedWallet = walletRepository.findById(payDebitDTO.account).orElseThrow { NotFoundClientException() }
+        val savedWallet = walletRepository.findById(payDebitDTO.account).orElseThrow { NotFoundWalletException() }
 
         savedWallet.balance -= payDebitDTO.value
 
@@ -79,7 +79,7 @@ class WalletServiceImpl(
 
     override fun find(id: Int): WalletDTO {
         log.info("M=find, message=Init search wallet, wallet={}", id)
-        val wallet = walletRepository.findById(id).orElseThrow { NotFoundClientException() }
+        val wallet = walletRepository.findById(id).orElseThrow { NotFoundWalletException() }
         return walletToDTO(wallet)
     }
 

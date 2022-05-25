@@ -116,7 +116,7 @@ class WalletControllerTest(
         }
             .andExpect {
                 status { isBadRequest() }
-                jsonPath("$.message", Matchers.`is`("O cliente não foi encontrado."))
+                jsonPath("$.message", Matchers.`is`("A carteira não foi encontrada."))
             }
             .andDo { print() }
     }
@@ -172,7 +172,7 @@ class WalletControllerTest(
         }
             .andExpect {
                 status { isBadRequest() }
-                jsonPath("$.message", Matchers.`is`("O cliente não foi encontrado."))
+                jsonPath("$.message", Matchers.`is`("A carteira não foi encontrada."))
             }
             .andDo { print() }
     }
@@ -206,7 +206,7 @@ class WalletControllerTest(
         mockMvc.get(FIND, 100)
             .andExpect {
                 status { isBadRequest() }
-                jsonPath("$.message", Matchers.`is`("O cliente não foi encontrado."))
+                jsonPath("$.message", Matchers.`is`("A carteira não foi encontrada."))
             }
             .andDo { print() }
     }

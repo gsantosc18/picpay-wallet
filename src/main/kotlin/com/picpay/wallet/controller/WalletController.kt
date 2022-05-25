@@ -4,7 +4,7 @@ import com.picpay.wallet.controller.api.WalletAPI
 import com.picpay.wallet.dto.*
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.InvalidValueException
-import com.picpay.wallet.exception.NotFoundClientException
+import com.picpay.wallet.exception.NotFoundWalletException
 import com.picpay.wallet.service.WalletService
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.BAD_REQUEST
@@ -35,7 +35,8 @@ class WalletController(
     override fun findWallet(@PathVariable("id") id: Int): ResponseEntity<WalletDTO> =
         status(OK).body(walletService.find(id))
 
-    @ExceptionHandler(value = [InsuficienteBalanceException::class, NotFoundClientException::class, InvalidValueException::class])
+    @ExceptionHandler(value = [InsuficienteBalanceException::class, NotFoundWalletException::class,
+        InvalidValueException::class])
     fun exceptionHandler(runtimeException: RuntimeException) =
         status(BAD_REQUEST).body(mapOf("message" to runtimeException.message))
 }
