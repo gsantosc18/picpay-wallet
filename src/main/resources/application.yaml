@@ -1,15 +1,32 @@
 server:
-  port: 8088
+  port: 80
 
 spring:
+  main:
+    banner-mode: off
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/wallet
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     show-sql: true
     properties:
       hibernate.format_sql: true
+    hibernate:
+      ddl-auto: create
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:rabbit}
+    password: ${RABBIT_PASSWORD:rabbit}
 
 queue:
   history: history-queue

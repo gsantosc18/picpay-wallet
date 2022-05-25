@@ -8,11 +8,11 @@ import com.picpay.wallet.exception.DestinationNotFoundException
 import com.picpay.wallet.exception.InsuficienteBalanceException
 import com.picpay.wallet.exception.InvalidValueException
 import com.picpay.wallet.exception.NotFoundClientException
-import com.picpay.wallet.rabbit.HistoryProducer
 import com.picpay.wallet.repository.WalletRepository
 import com.picpay.wallet.service.HistoryService
 import com.picpay.wallet.service.WalletService
 import com.picpay.wallet.util.walletToDTO
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,7 +20,9 @@ class WalletServiceImpl(
     private val walletRepository: WalletRepository,
     private val historyService: HistoryService
 ): WalletService {
+    private val log = LoggerFactory.getLogger(WalletServiceImpl::class.java)
     override fun withdrawal(withdrawDTO: WithdrawDTO): WalletDTO {
+        log.info("M=withdrawal, message=Init withdrawal, wallet={}", withdrawDTO.account)
         validateValue(withdrawDTO.value)
         var wallet = walletRepository.findById(withdrawDTO.account).orElseThrow{NotFoundClientException()}
         val value = withdrawDTO.value
@@ -29,10 +31,13 @@ class WalletServiceImpl(
 
         wallet.balance -= value
         saveWalletAndHistory(wallet, WITHDRAWAL)
+        log.info("M=withdrawal, message=Success withdrawal from wallet, wallet={}", withdrawDTO.account)
         return walletToDTO(wallet)
     }
 
     override fun transfer(transferDTO: TransferDTO): WalletDTO {
+        log.info("M=transfer, message=Init transfer between wallets, sender={}, destination={}, value={}",
+            transferDTO.sender, transferDTO.destination, transferDTO.value)
         validateValue(transferDTO.value)
         val sender = walletRepository.findById(transferDTO.sender).orElseThrow{NotFoundClientException()}
         val destination = walletRepository.findById(transferDTO.destination).orElseThrow{DestinationNotFoundException()}
@@ -44,6 +49,8 @@ class WalletServiceImpl(
 
         saveWalletAndHistory(sender, TRANSFER)
         saveWalletAndHistory(destination, TRANSFER)
+        log.info("M=transfer, message=Success transfer between wallets, sender={}, destination={}",
+            transferDTO.sender, transferDTO.destination)
 
         return walletToDTO(sender)
     }

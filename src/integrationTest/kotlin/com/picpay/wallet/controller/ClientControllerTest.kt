@@ -3,6 +3,7 @@ package com.picpay.wallet.controller
 import com.picpay.wallet.BaseTest
 import com.picpay.wallet.createClienteDtoMock
 import com.picpay.wallet.updateClientDTOMock
+import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -30,7 +31,10 @@ class ClientControllerTest(
                 accept = APPLICATION_JSON
                 content = mapper().writeValueAsString(createClienteDtoMock())
             }
-            .andExpect { status { isCreated() } }
+            .andExpect {
+                status { isCreated() }
+                jsonPath("$.createdAt", Matchers.notNullValue())
+            }
             .andDo { print() }
     }
 
