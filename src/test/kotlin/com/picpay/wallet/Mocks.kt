@@ -2,13 +2,11 @@ package com.picpay.wallet
 
 import com.picpay.wallet.dto.*
 import com.picpay.wallet.entity.Client
-import com.picpay.wallet.entity.DocumentType
+import com.picpay.wallet.enums.DocumentType
 import com.picpay.wallet.entity.History
 import com.picpay.wallet.entity.Wallet
-import com.picpay.wallet.enums.HistoryAction
 import com.picpay.wallet.enums.HistoryAction.WITHDRAWAL
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
 const val CLIENTE_NAME = "Fulano"

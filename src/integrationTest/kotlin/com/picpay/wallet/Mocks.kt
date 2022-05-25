@@ -2,7 +2,7 @@ package com.picpay.wallet
 
 import com.picpay.wallet.dto.*
 import com.picpay.wallet.entity.Client
-import com.picpay.wallet.entity.DocumentType
+import com.picpay.wallet.enums.DocumentType
 import com.picpay.wallet.entity.Wallet
 import java.time.LocalDate
 

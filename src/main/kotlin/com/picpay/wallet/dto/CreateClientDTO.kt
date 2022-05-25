@@ -1,6 +1,6 @@
 package com.picpay.wallet.dto
 
-import com.picpay.wallet.entity.DocumentType
+import com.picpay.wallet.enums.DocumentType
 import java.time.LocalDate
 
 data class CreateClientDTO(

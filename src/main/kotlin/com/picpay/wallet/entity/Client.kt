@@ -1,5 +1,6 @@
 package com.picpay.wallet.entity
 
+import com.picpay.wallet.enums.DocumentType
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.*
