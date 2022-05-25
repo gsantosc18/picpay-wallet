@@ -33,6 +33,7 @@ fun clienteMock() = Client(
     birthday = LocalDate.now(),
     document = DOCUMENT_NUMBER,
     documentType = DocumentType.CPF,
+    createdAt = now(),
     wallet = Wallet(
         account = 1,
         balance = 10.0,
@@ -63,7 +64,7 @@ fun walletMock() =
         account = 1,
         balance = 10.0,
         client = clienteMock(),
-        createdAt = now()
+        createdAt = now(),
     )
 
 fun secondWalletMock() =

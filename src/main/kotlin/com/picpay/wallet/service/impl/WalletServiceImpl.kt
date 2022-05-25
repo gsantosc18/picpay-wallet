@@ -77,6 +77,12 @@ class WalletServiceImpl(
         return walletToDTO(savedWallet)
     }
 
+    override fun find(id: Int): WalletDTO {
+        log.info("M=find, message=Init search wallet, wallet={}", id)
+        val wallet = walletRepository.findById(id).orElseThrow { NotFoundClientException() }
+        return walletToDTO(wallet)
+    }
+
     private fun saveWalletAndHistory(wallet: Wallet, action: HistoryAction) {
         historyService.save(wallet, action)
         walletRepository.save(wallet)

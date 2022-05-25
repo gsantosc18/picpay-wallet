@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.status
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
@@ -30,6 +31,9 @@ class WalletController(
 
     override fun payDebit(@RequestBody payDebitDTO: PayDebitDTO): ResponseEntity<WalletDTO> =
         status(OK).body(walletService.payDebit(payDebitDTO))
+
+    override fun findWallet(@PathVariable("id") id: Int): ResponseEntity<WalletDTO> =
+        status(OK).body(walletService.find(id))
 
     @ExceptionHandler(value = [InsuficienteBalanceException::class, NotFoundClientException::class, InvalidValueException::class])
     fun exceptionHandler(runtimeException: RuntimeException) =

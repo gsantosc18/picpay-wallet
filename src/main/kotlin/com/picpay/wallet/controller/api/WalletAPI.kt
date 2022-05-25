@@ -25,4 +25,8 @@ interface WalletAPI {
     @ApiOperation(value = "Pagar conta com saldo de carteira")
     @PostMapping("/paydebit")
     fun payDebit(payDebitDTO: PayDebitDTO): ResponseEntity<WalletDTO>
+
+    @ApiOperation(value = "Busca carteira pelo id")
+    @PostMapping("/{id}")
+    fun findWallet(id: Int): ResponseEntity<WalletDTO>
 }

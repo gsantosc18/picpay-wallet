@@ -2,6 +2,7 @@ package com.picpay.wallet.service.impl
 
 import com.picpay.wallet.enums.HistoryAction
 import com.picpay.wallet.historyMock
+import com.picpay.wallet.rabbit.HistoryProducer
 import com.picpay.wallet.repository.HistoryRepository
 import com.picpay.wallet.walletMock
 import org.junit.jupiter.api.BeforeEach
@@ -17,6 +18,9 @@ internal class HistoryServiceImplTest {
 
     @Mock
     lateinit var historyRepository: HistoryRepository
+
+    @Mock
+    lateinit var historyProducer: HistoryProducer
 
     @BeforeEach
     fun setUp() {

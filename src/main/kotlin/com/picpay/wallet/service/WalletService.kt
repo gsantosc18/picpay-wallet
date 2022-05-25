@@ -7,4 +7,5 @@ interface WalletService {
     fun transfer(transferDTO: TransferDTO): WalletDTO
     fun deposit(depositDTO: DepositDTO): WalletDTO
     fun payDebit(payDebitDTO: PayDebitDTO): WalletDTO
+    fun find(id: Int): WalletDTO
 }

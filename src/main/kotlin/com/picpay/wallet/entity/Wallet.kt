@@ -1,6 +1,7 @@
 package com.picpay.wallet.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.picpay.wallet.dto.HistoryDTO
 import lombok.ToString
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -19,14 +20,13 @@ class Wallet (
     var client: Client,
     @Column(name = "balance")
     var balance: Double = 0.0,
+    @OneToMany(mappedBy = "wallet")
+    var historys: MutableList<History> = mutableListOf<History>(),
     override var createdAt: LocalDateTime? = null
 ): BaseEntity() {
     companion object {
         const val SEQUENCE_NAME = "sq_wallet"
     }
-
-    @OneToMany(mappedBy = "wallet")
-    private var historys = mutableListOf<History>()
 
     fun addHistory(history: History) {
         historys += history

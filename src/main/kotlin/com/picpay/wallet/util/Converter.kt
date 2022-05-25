@@ -2,8 +2,10 @@ package com.picpay.wallet.util
 
 import com.picpay.wallet.dto.ClienteDTO
 import com.picpay.wallet.dto.CreateClientDTO
+import com.picpay.wallet.dto.HistoryDTO
 import com.picpay.wallet.dto.WalletDTO
 import com.picpay.wallet.entity.Client
+import com.picpay.wallet.entity.History
 import com.picpay.wallet.entity.Wallet
 
 fun createDTOToClient(createClientDTO: CreateClientDTO) =
@@ -27,18 +29,19 @@ fun clientToDTO(client: Client) =
         documentType = client.documentType,
         createdAt = client.createdAt!!,
         updatedAt = client.updatedAt,
-        wallet = WalletDTO(
-            account = client.wallet?.account!!,
-            balance = client.wallet?.balance!!,
-            createdAt = client.wallet?.createdAt!!,
-            updatedAt = client.wallet?.updatedAt
-        )
+        wallet = walletToDTO(client.wallet!!)
     )
 
 fun walletToDTO(wallet: Wallet) =
     WalletDTO(
         account = wallet.account!!,
         balance = wallet.balance,
+        historys = wallet.historys.map { historyToDTO(it) },
         createdAt = wallet.createdAt!!,
         updatedAt = wallet.updatedAt
     )
+
+fun historyToDTO(history: History) = HistoryDTO(
+    action = history.historyAction,
+    createdAt = history.createdAt!!
+)

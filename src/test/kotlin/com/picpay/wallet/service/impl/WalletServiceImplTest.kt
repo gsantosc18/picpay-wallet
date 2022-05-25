@@ -158,4 +158,18 @@ internal class WalletServiceImplTest {
         given(walletRepository.findById(any())).willReturn(Optional.empty())
         assertThatThrownBy { walletServiceImpl.payDebit(payDebitDTONegativeMock()) }.isInstanceOf(InvalidValueException::class.java)
     }
+
+    @Test
+    fun `should find wallet by id`() {
+        given(walletRepository.findById(any())).willReturn(Optional.of(walletMock()))
+        val wallet = walletServiceImpl.find(1)
+        assertThat(wallet.account).isEqualTo(1)
+        assertThat(wallet.balance).isNotNaN
+    }
+
+    @Test
+    fun `shouldn't find wallet if not exist`() {
+        given(walletRepository.findById(any())).willReturn(Optional.empty())
+        assertThatThrownBy { walletServiceImpl.find(1) }.isInstanceOf(NotFoundClientException::class.java)
+    }
 }
