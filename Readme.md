@@ -27,7 +27,6 @@
             - Se possui saldo suficiente
         - Caso o cliente não tenha saldo suficiente para a operação, deve ser lançado uma exceção informando.
         - Caso o cliente tenha saldo, deve realizar a operação e registrar no histórico.
-        - Caso haja algum problema na transação, deve reverter tudo que já tiver sido feito.
 - **Cenário 3:** Transferência
     - Deve ser possivel realizar transferência entre contas de clientes
         - Ao realizar uma transferência entre contas, deve ser dada as seguintes informações
@@ -38,7 +37,6 @@
             - Se a conta do cliente remetente e destinatário existe e está ativa
                 - Caso a conta não exista, deve ser lançada uma exceção informado
                 - Caso o cliente tenha saldo, deve realizar a operação e registrar no histórico
-                - Caso haja algum problema na transação, deve ser feito o rollback em tudo que já tiver sido feito
 - **Cenário 4:** Depósito
     - Deve ser possível realizar depósito em uma conta existente
         - Ao realizar o depósito em uma conta existente
