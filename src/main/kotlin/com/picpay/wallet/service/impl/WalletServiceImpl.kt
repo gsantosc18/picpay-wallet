@@ -47,8 +47,8 @@ class WalletServiceImpl(
         sender.balance -= value
         destination.balance += value
 
-        saveWalletAndHistory(sender, TRANSFER)
-        saveWalletAndHistory(destination, TRANSFER)
+        saveWalletAndHistory(sender, TRANSFER_SENT)
+        saveWalletAndHistory(destination, TRANSFER_RECEIVED)
         log.info("M=transfer, message=Success transfer between wallets, sender={}, destination={}",
             transferDTO.sender, transferDTO.destination)
 

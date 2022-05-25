@@ -6,5 +6,6 @@ enum class HistoryAction(
     WITHDRAWAL("withdrawal"),
     PAY_DEBIT("pay_debit"),
     DEPOSIT("deposit"),
-    TRANSFER("transfer")
+    TRANSFER_SENT("transfer_sent"),
+    TRANSFER_RECEIVED("transfer_received")
 }
