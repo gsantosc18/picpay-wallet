@@ -56,3 +56,26 @@
         - Ao realizar o pagamento da conta, deve ser registrado um histórico de movimentação
 - **Cenário 6:** Mensageria
     - A cada movimentação realizada deve ser enviada uma mensagem para uma fila
+
+## Arquitetura
+![Arquitetura do serviço](./img/arquitetura.jpg)    
+## Acesso ao serviço
+####Subindo o serviço
+Iniciar o serviço:
+
+<code>
+docker-compose up -d --build
+</code>
+
+Parar o serviço:
+
+<code>
+docker-compose down
+</code>
+
+#### Endpoint
+[Swagger-ui](http://localhost:8091/swagger-ui.html)
+
+[Criar cliente](http://localhost:8091/client)
+
+[Criar carteira](http://localhost:8091/wallet)
