@@ -15,10 +15,11 @@ import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @SqlGroup(
-    Sql(scripts = ["classpath:db/insert_client.sql","classpath:db/insert_wallet.sql"], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+    Sql(scripts = ["classpath:db/insert_client.sql","classpath:db/insert_wallet.sql", "classpath:db/insert_history.sql"], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
     Sql(scripts = ["classpath:db/clean_history.sql", "classpath:db/clean_wallet.sql", "classpath:db/clean_client.sql"], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 )
 class WalletControllerTest(
@@ -39,6 +40,7 @@ class WalletControllerTest(
         const val TRANSFER = ENDPOINT+"/transfer"
         const val DEPOSIT = ENDPOINT+"/deposit"
         const val PAYDEBIT = ENDPOINT+"/paydebit"
+        const val FIND = ENDPOINT+"/{id}"
     }
 
     @Test
@@ -185,6 +187,26 @@ class WalletControllerTest(
             .andExpect {
                 status { isBadRequest() }
                 jsonPath("$.message", Matchers.`is`("O valor informa deve ser positivo."))
+            }
+            .andDo { print() }
+    }
+
+    @Test
+    fun `should find wallet by id`() {
+        mockMvc.get(FIND, 1)
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.account", Matchers.`is`(1))
+            }
+            .andDo { print() }
+    }
+
+    @Test
+    fun `shouldn't find wallet if not exist`() {
+        mockMvc.get(FIND, 100)
+            .andExpect {
+                status { isBadRequest() }
+                jsonPath("$.message", Matchers.`is`("O cliente não foi encontrado."))
             }
             .andDo { print() }
     }

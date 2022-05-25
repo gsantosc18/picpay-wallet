@@ -4,6 +4,7 @@ import com.picpay.wallet.dto.*
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
@@ -27,6 +28,6 @@ interface WalletAPI {
     fun payDebit(payDebitDTO: PayDebitDTO): ResponseEntity<WalletDTO>
 
     @ApiOperation(value = "Busca carteira pelo id")
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     fun findWallet(id: Int): ResponseEntity<WalletDTO>
 }
