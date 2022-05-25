@@ -60,7 +60,7 @@
 ## Arquitetura
 ![Arquitetura do serviço](./img/arquitetura.jpg)    
 ## Acesso ao serviço
-####Subindo o serviço
+#### Subindo o serviço
 Iniciar o serviço:
 
 <code>
